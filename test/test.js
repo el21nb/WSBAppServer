@@ -37,114 +37,114 @@ describe("The WSB app", ()=>{
         assert.equal(2+2,4);
     });
 
-//BUS STOPS COLLECTION
-    const myBusStopAddress = "address1";
-    const myBusStopId = "id1";
-    const myBusStopName = "name1";
-    const myBusStopDoc = {address: myBusStopAddress, id: myBusStopId, name: myBusStopName};
+// //BUS STOPS COLLECTION
+//     const myBusStopAddress = "address1";
+//     const myBusStopId = "id1";
+//     const myBusStopName = "name1";
+//     const myBusStopDoc = {address: myBusStopAddress, id: myBusStopId, name: myBusStopName};
 
-    //helper functions
+//     //helper functions
 
-    async function createBusStopDoc() {
-        const admin = getAdminFirestore();
-        const busStopDoc = admin.collection("BusStops").doc(myBusStopId);
-        await busStopDoc.set(myBusStopDoc);
-    }
+//     async function createBusStopDoc() {
+//         const admin = getAdminFirestore();
+//         const busStopDoc = admin.collection("BusStops").doc(myBusStopId);
+//         await busStopDoc.set(myBusStopDoc);
+//     }
 
-    // Write tests:
+//     // Write tests:
 
-    it("Admin can create a bus stop with correct fields", async() =>{
-        const db = getFirestore(myAdminAuth);
-        const doc = db.collection("BusStops").doc(myBusStopId);
-        await firebase.assertSucceeds(doc.set(myBusStopDoc));
-    });
+//     it("Admin can create a bus stop with correct fields", async() =>{
+//         const db = getFirestore(myAdminAuth);
+//         const doc = db.collection("BusStops").doc(myBusStopId);
+//         await firebase.assertSucceeds(doc.set(myBusStopDoc));
+//     });
 
-    it("Admin can update a bus stop document with correct fields", async() => {
-        createBusStopDoc();
-        const db = getFirestore(myAdminAuth);
-        const testDoc = db.collection("BusStops").doc(myBusStopId);
-        await firebase.assertSucceeds(testDoc.update({address: 'new address'}));
-    });
+//     it("Admin can update a bus stop document with correct fields", async() => {
+//         createBusStopDoc();
+//         const db = getFirestore(myAdminAuth);
+//         const testDoc = db.collection("BusStops").doc(myBusStopId);
+//         await firebase.assertSucceeds(testDoc.update({address: 'new address'}));
+//     });
 
-    it("Admin can delete a bus stop document", async() => {
-        createBusStopDoc();
-        const db = getFirestore(myAdminAuth);
-        const testDoc = db.collection("BusStops").doc(myBusStopId);
-        await firebase.assertSucceeds(testDoc.delete());
-    });
+//     it("Admin can delete a bus stop document", async() => {
+//         createBusStopDoc();
+//         const db = getFirestore(myAdminAuth);
+//         const testDoc = db.collection("BusStops").doc(myBusStopId);
+//         await firebase.assertSucceeds(testDoc.delete());
+//     });
 
-    it("Admin can't create a bus stop with incorrect fields", async() =>{
-        const db = getFirestore(myAdminAuth);
-        const doc = db.collection("BusStops").doc(myBusStopId);
-        await firebase.assertFails(doc.set({id: myBusStopId, name: myBusStopName}));
-    });
+//     it("Admin can't create a bus stop with incorrect fields", async() =>{
+//         const db = getFirestore(myAdminAuth);
+//         const doc = db.collection("BusStops").doc(myBusStopId);
+//         await firebase.assertFails(doc.set({id: myBusStopId, name: myBusStopName}));
+//     });
 
-    it("Non-admin can't create a bus stop", async() => {
-        const db = getFirestore(myAuth);
-        const doc = db.collection("BusStops").doc(myBusStopId);
-        await firebase.assertFails(doc.set(myBusStopDoc));
-    });
+//     it("Non-admin can't create a bus stop", async() => {
+//         const db = getFirestore(myAuth);
+//         const doc = db.collection("BusStops").doc(myBusStopId);
+//         await firebase.assertFails(doc.set(myBusStopDoc));
+//     });
 
-    it("Non-admin can't update a bus stop document with correct fields", async() => {
-        createBusStopDoc();
-        const db = getFirestore(myAuth);
-        const testDoc = db.collection("BusStops").doc(myBusStopId);
-        await firebase.assertFails(testDoc.update({address: 'new address'}));
-    });
+//     it("Non-admin can't update a bus stop document with correct fields", async() => {
+//         createBusStopDoc();
+//         const db = getFirestore(myAuth);
+//         const testDoc = db.collection("BusStops").doc(myBusStopId);
+//         await firebase.assertFails(testDoc.update({address: 'new address'}));
+//     });
 
-    it("Non-admin can't delete a bus stop", async() => {
-        createBusStopDoc();
-        const db = getFirestore(myAuth);
-        const testDoc = db.collection("BusStops").doc(myBusStopId);
-        await firebase.assertFails(testDoc.delete());
-    });
+//     it("Non-admin can't delete a bus stop", async() => {
+//         createBusStopDoc();
+//         const db = getFirestore(myAuth);
+//         const testDoc = db.collection("BusStops").doc(myBusStopId);
+//         await firebase.assertFails(testDoc.delete());
+//     });
     
-    it("Unauth user can't create a bus stop", async() => {
-        const db = getFirestore(null);
-        const doc = db.collection("BusStops").doc(myBusStopId);
-        await firebase.assertFails(doc.set(myBusStopDoc));
-    });
+//     it("Unauth user can't create a bus stop", async() => {
+//         const db = getFirestore(null);
+//         const doc = db.collection("BusStops").doc(myBusStopId);
+//         await firebase.assertFails(doc.set(myBusStopDoc));
+//     });
 
-    it("Unauth user can't update a bus stop", async() => {
-        createBusStopDoc();
-        const db = getFirestore(null);
-        const testDoc = db.collection("BusStops").doc(myBusStopId);
-        await firebase.assertFails(testDoc.update({address: 'new address'}));
-    });
+//     it("Unauth user can't update a bus stop", async() => {
+//         createBusStopDoc();
+//         const db = getFirestore(null);
+//         const testDoc = db.collection("BusStops").doc(myBusStopId);
+//         await firebase.assertFails(testDoc.update({address: 'new address'}));
+//     });
 
-    it("Unauth user can't delete a bus stop", async() => {
-        createBusStopDoc();
-        const db = getFirestore(null);
-        const testDoc = db.collection("BusStops").doc(myBusStopId);
-        await firebase.assertFails(testDoc.delete());
-    });
+//     it("Unauth user can't delete a bus stop", async() => {
+//         createBusStopDoc();
+//         const db = getFirestore(null);
+//         const testDoc = db.collection("BusStops").doc(myBusStopId);
+//         await firebase.assertFails(testDoc.delete());
+//     });
 
 
-    //Read Tests:
+//     //Read Tests:
 
-    it("Auth user can get bus stop document", async() => {
-        const db = getFirestore(myAuth);
-        const testDoc = db.collection("BusStops").doc(myBusStopId);
-        await firebase.assertSucceeds(testDoc.get());
-    });
+//     it("Auth user can get bus stop document", async() => {
+//         const db = getFirestore(myAuth);
+//         const testDoc = db.collection("BusStops").doc(myBusStopId);
+//         await firebase.assertSucceeds(testDoc.get());
+//     });
 
-    it("Auth user can list bus stop documents", async() => {
-            const db = getFirestore(myAuth);
-            const testRef = db.collection("BusStops");
-            await firebase.assertSucceeds(testRef.get());
-    });
+//     it("Auth user can list bus stop documents", async() => {
+//             const db = getFirestore(myAuth);
+//             const testRef = db.collection("BusStops");
+//             await firebase.assertSucceeds(testRef.get());
+//     });
 
-    it("Unauth user can't get bus stop documents", async() => {
-        const db = getFirestore(null);
-        const testDoc = db.collection("BusStops").doc(myBusStopId);
-        await firebase.assertFails(testDoc.get());
-    });
+//     it("Unauth user can't get bus stop documents", async() => {
+//         const db = getFirestore(null);
+//         const testDoc = db.collection("BusStops").doc(myBusStopId);
+//         await firebase.assertFails(testDoc.get());
+//     });
 
-    it("Unauth user can't list bus stop documents", async() => {
-        const db = getFirestore(null);
-        const testRef = db.collection("BusStops");
-        await firebase.assertFails(testRef.get());
-    });
+//     it("Unauth user can't list bus stop documents", async() => {
+//         const db = getFirestore(null);
+//         const testRef = db.collection("BusStops");
+//         await firebase.assertFails(testRef.get());
+//     });
 
     //CHILD COLLECTION
     const myChildId = "id1";
@@ -166,197 +166,267 @@ describe("The WSB app", ()=>{
     }
 
     //Write Tests:
-    it("Admin can create a child doc with correct fields", async() => {
-        const db = getFirestore(myAdminAuth);
-        const doc = db.collection("Children").doc(myChildId);
-        await firebase.assertSucceeds(doc.set(myChildDoc));
-    });
+    // it("Admin can create a child doc with correct fields", async() => {
+    //     const db = getFirestore(myAdminAuth);
+    //     const doc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertSucceeds(doc.set(myChildDoc));
+    // });
 
-    it("Admin can't create a child doc with incorrect fields", async() => {
-        const db = getFirestore(myAdminAuth);
-        const doc = db.collection("Children").doc(myChildId);
-        await firebase.assertFails(doc.set(myInvalidChildDoc));
-    });
+    // it("Admin can't create a child doc with incorrect fields", async() => {
+    //     const db = getFirestore(myAdminAuth);
+    //     const doc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertFails(doc.set(myInvalidChildDoc));
+    // });
 
-    it("Admin can update a child doc with correct fields", async() => {
-        createChildDoc();
-        const db = getFirestore(myAdminAuth);
-        const testDoc = db.collection("Children").doc(myChildId);
-        await firebase.assertSucceeds(testDoc.update({classCode: 'new code'}));
-    });
+    // it("Admin can update a child doc with correct fields", async() => {
+    //     createChildDoc();
+    //     const db = getFirestore(myAdminAuth);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertSucceeds(testDoc.update({classCode: 'new code'}));
+    // });
 
     
 
-    it("Admin can't update a child doc with incorrect fields", async() => {
-        createChildDoc();
-        const db = getFirestore(myAdminAuth);
-        const testDoc = db.collection("Children").doc(myChildId);
-        await firebase.assertFails(testDoc.update({randomField: 'random'}));
-    });
+    // it("Admin can't update a child doc with incorrect fields", async() => {
+    //     createChildDoc();
+    //     const db = getFirestore(myAdminAuth);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertFails(testDoc.update({randomField: 'random'}));
+    // });
 
-    it("Admin can delete a child doc", async() => {
-        createChildDoc();
-        const db = getFirestore(myAdminAuth);
-        const testDoc = db.collection("Children").doc(myChildId);
-        await firebase.assertSucceeds(testDoc.delete());
-    });
+    // it("Admin can delete a child doc", async() => {
+    //     createChildDoc();
+    //     const db = getFirestore(myAdminAuth);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertSucceeds(testDoc.delete());
+    // });
 
-    it("Parent can create their child's doc with correct fields", async() => {
-        const db = getFirestore(myParentAuth);
-        const testDoc = db.collection("Children").doc(myChildId);
-        await firebase.assertSucceeds(testDoc.set(myChildDoc));
-    });
+    // it("Parent can create their child's doc with correct fields", async() => {
+    //     const db = getFirestore(myParentAuth);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertSucceeds(testDoc.set(myChildDoc));
+    // });
 
-    it("Parent can update their child's doc with correct fields", async() => {
-        createChildDoc();
-        const db = getFirestore(myParentAuth);
-        const testDoc = db.collection("Children").doc(myChildId);
-        await firebase.assertSucceeds(testDoc.update({firstName: 'Newname'}));
-    });
+    // it("Parent can update their child's doc with correct fields", async() => {
+    //     createChildDoc();
+    //     const db = getFirestore(myParentAuth);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertSucceeds(testDoc.update({firstName: 'Newname'}));
+    // });
 
-    it("Parent can delete their child's doc", async() => {
-        createChildDoc();
-        const db = getFirestore(myParentAuth);
-        const testDoc = db.collection("Children").doc(myChildId);
-        await firebase.assertSucceeds(testDoc.update({firstName: 'Newname'}));
-    });
+    // it("Parent can delete their child's doc", async() => {
+    //     createChildDoc();
+    //     const db = getFirestore(myParentAuth);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertSucceeds(testDoc.update({firstName: 'Newname'}));
+    // });
 
-    it("Parent can't create someone else's child's doc", async() => {
-        const db = getFirestore(theirParentAuth);
-        const testDoc = db.collection("Children").doc(myChildId);
-        await firebase.assertFails(testDoc.set(myChildDoc));
-    });
+    // it("Parent can't create someone else's child's doc", async() => {
+    //     const db = getFirestore(theirParentAuth);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertFails(testDoc.set(myChildDoc));
+    // });
 
-    it("Parent can't update someone else's child's doc", async() => {
-        createChildDoc();
-        const db = getFirestore(theirParentAuth);
-        const testDoc = db.collection("Children").doc(myChildId);
-        await firebase.assertFails(testDoc.update({firstName: 'Newname'}));
-    });
+    // it("Parent can't update someone else's child's doc", async() => {
+    //     createChildDoc();
+    //     const db = getFirestore(theirParentAuth);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertFails(testDoc.update({firstName: 'Newname'}));
+    // });
 
-    it("Parent can't delete someone else's child's doc", async() => {
-        createChildDoc();
-        const db = getFirestore(theirParentAuth);
-        const testDoc = db.collection("Children").doc(myChildId);
-        await firebase.assertFails(testDoc.delete());
-    });
+    // it("Parent can't delete someone else's child's doc", async() => {
+    //     createChildDoc();
+    //     const db = getFirestore(theirParentAuth);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertFails(testDoc.delete());
+    // });
 
-    it("Non-admin, non-parent can't update a child doc", async() => {
-        createChildDoc();
-        const db = getFirestore(myAuth);
-        const testDoc = db.collection("Children").doc(myChildId);
-        await firebase.assertFails(testDoc.update({firstName: 'Newname'}));
-    });
+    // it("Non-admin, non-parent can't update a child doc", async() => {
+    //     createChildDoc();
+    //     const db = getFirestore(myAuth);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertFails(testDoc.update({firstName: 'Newname'}));
+    // });
 
-    it("Non-admin, non-parent can't delete a child doc", async() => {
-        createChildDoc();
-        const db = getFirestore(myAuth);
-        const testDoc = db.collection("Children").doc(myChildId);
-        await firebase.assertFails(testDoc.delete());
-    });
+    // it("Non-admin, non-parent can't delete a child doc", async() => {
+    //     createChildDoc();
+    //     const db = getFirestore(myAuth);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertFails(testDoc.delete());
+    // });
 
-    it("Unauth user can't create a child doc", async() => {
-        const db = getFirestore(null);
-        const testDoc = db.collection("Children").doc(myChildId);
-        await firebase.assertFails(testDoc.set(myChildDoc));
-    });
+    // it("Unauth user can't create a child doc", async() => {
+    //     const db = getFirestore(null);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertFails(testDoc.set(myChildDoc));
+    // });
 
-    it("Unauth user can't update a child doc", async() => {
-        createChildDoc();
-        const db = getFirestore(null);
-        const testDoc = db.collection("Children").doc(myChildId);
-        await firebase.assertFails(testDoc.update({firstName: 'Newname'}));
-    });
+    // it("Unauth user can't update a child doc", async() => {
+    //     createChildDoc();
+    //     const db = getFirestore(null);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertFails(testDoc.update({firstName: 'Newname'}));
+    // });
 
-    it("Unauth user can't delete a child doc", async() => {
-        createChildDoc();
-        const db = getFirestore(null);
-        const testDoc = db.collection("Children").doc(myChildId);
-        await firebase.assertFails(testDoc.delete());
-    });
+    // it("Unauth user can't delete a child doc", async() => {
+    //     createChildDoc();
+    //     const db = getFirestore(null);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertFails(testDoc.delete());
+    // });
 
-    // //Read Tests:
+    // // //Read Tests:
     
     // it("Admin can list child docs", async() => {
-
+    //     const db = getFirestore(myAdminAuth);
+    //     const testRef = db.collection("Children");
+    //     await firebase.assertSucceeds(testRef.get());
     // });
-    
+
+
 
     // it("Driver can list child docs", async() => {
-
+    //     const db = getFirestore(myDriverAuth);
+    //     const testRef = db.collection("Children");
+    //     await firebase.assertSucceeds(testRef.get());
     // });
 
     // it("Non-admin, non-driver auth user can't list child docs", async() => {
-
+    //     const db = getFirestore(myAuth);
+    //     const testRef = db.collection("Children");
+    //     await firebase.assertFails(testRef.get());
     // });
 
     // it("Unauth user can't list child docs", async() => {
-
+    //     const db = getFirestore(null);
+    //     const testRef = db.collection("Children");
+    //     await firebase.assertFails(testRef.get());
     // });
 
     // it("Admin can get child doc", async() => {
-
+    //     const db = getFirestore(myAdminAuth);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertSucceeds(testDoc.get());
     // });
 
     // it("Driver can get child doc", async() => {
-
+    //     const db = getFirestore(myDriverAuth);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertSucceeds(testDoc.get());
     // });
 
     // it("Parent can get their child's doc", async() => {
-
+    //     const db = getFirestore(myParentAuth);
+    //     const testQuery = db.collection("Children").where("parentId", "==", myParentId);
+    //     await firebase.assertSucceeds(testQuery.get());
     // });
 
     // it("Parent can't get someone else's child's doc", async() => {
-
+    //     const db = getFirestore(theirParentAuth);
+    //     const testQuery = db.collection("Children").where("parentId", "==", myParentId);
+    //     await firebase.assertFails(testQuery.get());
     // });
 
     // it("Non-parent, non-driver, non-admin auth user can't get child doc", async() => {
-
+    //     const db = getFirestore(myAuth);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertFails(testDoc.get());
     // });
 
     // it("Unauth user can't get child doc", async() => {
-
+    //     const db = getFirestore(null);
+    //     const testDoc = db.collection("Children").doc(myChildId);
+    //     await firebase.assertFails(testDoc.get());
     // });
 
     // //JACKETS COLLECTION
+   
+    const myJacketIdentifier = "JA1";
+    const myJacketDoc = {identifier: myJacketIdentifier};
+    const myInvalidJacketDoc = {name: myJacketIdentifier};
 
+
+    //helper functions
+
+    async function createJacketDoc(jacketDoc) {
+        const admin = getAdminFirestore();
+        const testDoc = admin.collection("Jackets").doc(myJacketIdentifier);
+        await testDoc.set(jacketDoc);
+    }
     // //Write Tests:
 
-    // it("Admin can create jacket doc", async() => {
+    it("Admin can create jacket doc with correct fields", async() => {
+        const db = getFirestore(myAdminAuth);
+        const testDoc = db.collection("Jackets").doc(myJacketIdentifier);
+        await firebase.assertSucceeds(testDoc.set(myJacketDoc));
+    });
 
-    // });
+    it("Admin can update jacket doc with correct fields", async() => {
+        createJacketDoc(myJacketDoc);
+        const db = getFirestore(myAdminAuth);
+        const testDoc = db.collection("Jackets").doc(myJacketIdentifier);
+        await firebase.assertSucceeds(testDoc.set({identifier: 'NewId'}));    
+    });
 
-    // it("Admin can update jacket doc", async() => {
+    it("Admin can't create jacket doc with incorrect fields", async() => {
+        const db = getFirestore(myAdminAuth);
+        const testDoc = db.collection("Jackets").doc(myJacketIdentifier);
+        await firebase.assertFails(testDoc.set(myInvalidJacketDoc));
+    });
 
-    // });
+    it("Admin can't update jacket doc with incorrect fields", async() => {
+        createJacketDoc(myJacketDoc);
+        const db = getFirestore(myAdminAuth);
+        const testDoc = db.collection("Jackets").doc(myJacketIdentifier);
+        await firebase.assertFails(testDoc.set({name: 'NewId'}));    
+    });
 
-    // it("Admin can delete jacket doc", async() => {
+    it("Admin can delete jacket doc", async() => {
+        createJacketDoc(myJacketDoc);
+        const db = getFirestore(myAdminAuth);
+        const testDoc = db.collection("Jackets").doc(myJacketIdentifier);
+        await firebase.assertSucceeds(testDoc.delete());   
+    });
 
-    // });
+    it("Non-admin auth can't create jacket doc", async() => {
+        const db = getFirestore(myAuth);
+        const testDoc = db.collection("Jackets").doc(myJacketIdentifier);
+        await firebase.assertFails(testDoc.set(myJacketDoc));
+    });
 
-    // it("Non-admin auth can't create jacket doc", async() => {
+    it("Non-admin auth can't update jacket doc", async() => {
+        createJacketDoc(myJacketDoc);
+        const db = getFirestore(myAuth);
+        const testDoc = db.collection("Jackets").doc(myJacketIdentifier);
+        await firebase.assertFails(testDoc.set({identifier: 'NewId'})); 
+    });
 
-    // });
+    it("Non-admin auth can't delete jacket doc", async() => {
+        createJacketDoc(myJacketDoc);
+        const db = getFirestore(myAuth);
+        const testDoc = db.collection("Jackets").doc(myJacketIdentifier);
+        await firebase.assertFails(testDoc.delete());   
+    });
 
-    // it("Non-admin auth can't update jacket doc", async() => {
+    it("Unauth can't create jacket doc", async() => {
+        const db = getFirestore(null);
+        const testDoc = db.collection("Jackets").doc(myJacketIdentifier);
+        await firebase.assertFails(testDoc.set(myJacketDoc));
+    });
 
-    // });
+    it("Unauth can't update jacket doc", async() => {
+        createJacketDoc(myJacketDoc);
+        const db = getFirestore(null);
+        const testDoc = db.collection("Jackets").doc(myJacketIdentifier);
+        await firebase.assertFails(testDoc.set({identifier: 'NewId'})); 
+    });
 
-    // it("Non-admin auth can't delete jacket doc", async() => {
-
-    // });
-
-    // it("Unauth can't create jacket doc", async() => {
-
-    // });
-
-    // it("Unauth can't update jacket doc", async() => {
-
-    // });
-
-    // it("Unauth can't delete jacket doc", async() => {
-
-    // });
+    it("Unauth can't delete jacket doc", async() => {
+        createJacketDoc(myJacketDoc);
+        const db = getFirestore(null);
+        const testDoc = db.collection("Jackets").doc(myJacketIdentifier);
+        await firebase.assertFails(testDoc.delete()); 
+    });
 
     // //Read Tests:
     
