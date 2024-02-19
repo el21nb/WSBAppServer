@@ -999,8 +999,29 @@ it("Auth user can't delete a passenger document", async() => {
     await firebase.assertFails(testDoc.delete());
 });
 
+//Read tests:
 
+it("Admin can get a passenger document", async() =>  {
+    const db = getFirestore(myAdminAuth);
+    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+    await firebase.assertSucceeds(testDoc.get());
+});
 
+it("Staff can get a passenger document", async() =>  {
+    const db = getFirestore(myAdminAuth);
+    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+    await firebase.assertSucceeds(testDoc.get());
+});
+
+it("Parent can get their child's passenger document", async() =>  {
+    createJourneyDoc(myDriverId);
+    createPassengerDoc(myParentId);
+    const db = getFirestore(myParentAuth);
+    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+    await firebase.assertSucceeds(testDoc.get());
+});
+
+//in a pickle with this one6
 
 
 

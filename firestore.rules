@@ -4,16 +4,201 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // This rule allows anyone with your Firestore database reference to view, edit,
-    // and delete all data in your Firestore database. It is useful for getting
-    // started, but it is configured to expire after 30 days because it
-    // leaves your app open to attackers. At that time, all client
-    // requests to your Firestore database will be denied.
-    //
-    // Make sure to write security rules for your app before that time, or else
-    // all client requests to your Firestore database will be denied until you Update
-    // your rules
+    // and delete all data in your Firestore database.
+    
     match /{document=**} {
-      allow read, write: if true;
+      allow read, write: if false;
+    }
+    //https://www.youtube.com/watch?v=VDulvfBpzZE
+    function documentFieldsCheckout(requiredFields, optionalFields){
+      let allFields = requiredFields.concat(optionalFields);
+      return request.resource.data.keys().hasAll(requiredFields) &&
+      request.resource.data.keys().hasOnly(allFields);
+    }
+
+    function ticketFieldsCheckout(){
+      let requiredTicketFields = ["busStopId", "childId", "journeyId", "ownerId", "pickUp", "schoolTicket", "ticketId"];
+      return request.resource.data.keys().hasAll(requiredTicketFields) &&
+      request.resource.data.keys().hasOnly(requiredTicketFields);
+    }
+
+    function journeyFieldsCheckout(){
+      let requiredJourneyFields = ["OutwardJourney", "driverContact", "id", "journeyDateTime", "driverId"];
+      return request.resource.data.keys().hasAll(requiredJourneyFields) &&
+      request.resource.data.keys().hasOnly(requiredJourneyFields);
+    }
+
+    function passengerFieldsCheckout(){
+      let requiredPassengerFields = ["Child", "Jacket", "JacketAssignTime", "JacketDeassignTime", "dropOffTime", "pickUpTime"];
+      return request.resource.data.keys().hasAll(requiredPassengerFields) &&
+      request.resource.data.keys().hasOnly(requiredPassengerFields);
+    }
+
+    // function journeyBelongsToDriver(){
+    //       return (get(/databases/$(database)/documents/Journeys/$(journeyDocument)).data.driverId == request.auth.uid);
+    // }
+
+
+    function userIsAuthorised(){
+      return request.auth.uid != null;
+    }
+
+    function userIsParent(){
+      return request.auth.token.parent;
+    }
+    function userIsDriver(){
+      return request.auth.token.driver;
+    }
+    function userIsAdmin(){
+      return request.auth.token.admin;
+    }
+
+    function userIsStaff(){
+      return request.auth.token.staff;
+    }
+    
+      match /BusStops/{busStopDocument}{
+      allow read: if userIsAuthorised();
+
+      allow create: if userIsAuthorised() &&
+      userIsAdmin() &&
+      documentFieldsCheckout(["address", "id", "name"], []);
+
+      allow update: if userIsAuthorised() &&
+      userIsAdmin() &&
+      documentFieldsCheckout(["address", "id", "name"], []);
+
+      allow delete: if userIsAuthorised() &&
+      userIsAdmin();
+    }
+
+    match /Children/{childDocument}{
+
+      allow read: if userIsAuthorised() &&
+      (userIsAdmin() || 
+      userIsDriver() ||
+      userIsStaff() ||
+      (userIsParent() && 
+      (resource.data.parentId == request.auth.uid)));
+
+      allow create: if userIsAuthorised() &&
+      documentFieldsCheckout(["childContacts", "classCode", "firstName", "id", "lastName", "parentId"],[]) &&
+      (userIsAdmin() ||
+      (userIsParent() &&
+      request.resource.data.parentId == request.auth.uid));
+
+      allow update: if userIsAuthorised() &&
+      documentFieldsCheckout(["childContacts", "classCode", "firstName", "id", "lastName", "parentId"],[]) &&
+      (userIsAdmin() ||
+      (userIsParent() &&
+      resource.data.parentId == request.auth.uid));
+
+      allow delete: if userIsAuthorised() &&
+      userIsAdmin()||
+      (userIsParent() &&
+      resource.data.parentId == request.auth.uid);
+    }
+
+      match /Jackets/{jacketDocument}{
+      allow read: if userIsAuthorised();
+
+      allow create, update: if userIsAuthorised() &&
+      userIsAdmin() && 
+      documentFieldsCheckout(["identifier"],[]);
+
+      allow delete: if userIsAuthorised() &&
+      userIsAdmin();
+    }
+
+      match /Tickets/{ticketDocument}{
+        allow get: if userIsAuthorised() &&
+        (userIsAdmin() ||
+        userIsDriver() ||
+        (userIsStaff() &&
+        resource.data.ownerId == request.auth.uid) ||
+        (userIsParent() && 
+        resource.data.ownerId == request.auth.uid));
+
+        allow list: if userIsAuthorised() &&
+        (userIsAdmin() ||
+        userIsDriver() ||
+        (userIsStaff() &&
+        resource.data.ownerId == request.auth.uid) ||
+        (userIsParent() 
+        && resource.data.ownerId == request.auth.uid));
+
+        allow create: if userIsAuthorised() &&
+        ticketFieldsCheckout() &&
+        (userIsAdmin() ||
+        ((userIsParent()||userisStaff()) &&
+        request.resource.data.ownerId == request.auth.uid));
+
+        allow update: if userIsAuthorised() &&
+        ticketFieldsCheckout() &&
+        (userIsAdmin() ||
+        ((userIsParent()||userisStaff()) &&
+        resource.data.ownerId == request.auth.uid));
+
+        allow delete: if userIsAuthorised() &&
+        (userIsAdmin() ||
+        ((userIsParent()||userisStaff()) &&
+        resource.data.ownerId == request.auth.uid));
+    }
+
+    match /Journeys/{journeyDocument}{
+      
+    function journeyBelongsToDriver(){
+        return (get(/databases/$(database)/documents/Journeys/$(journeyDocument)).data.driverId == request.auth.uid);
+      }
+
+      
+      
+    match /Journeys/{journeyDocument=**}{
+      allow create: if userIsAuthorised() &&
+      journeyFieldsCheckout() &&
+      userIsAdmin();
+
+      allow update: if userIsAuthorised() &&
+      journeyFieldsCheckout() &&
+      (userIsAdmin() ||
+      (userIsDriver() &&
+      resource.data.driverId == request.auth.uid));
+
+      allow delete: if false;
+    }
+      
+      allow read: if userIsAuthorised();
+
+      match /Passengers/{passengerDocument}{
+
+        function passengerBelongsToParent(){
+          return request.auth.uid == get(/databases/$(database)/documents/Journeys/$(journeyDocument)/Passengers/$(passengerDocument)).data.Child.parentId;
+         }
+        
+        allow create: if userIsAuthorised() &&
+        passengerFieldsCheckout() &&
+        (userIsAdmin() || 
+        (userIsDriver() &&
+        journeyBelongsToDriver()));        
+        
+        allow update:  if userIsAuthorised() &&
+        passengerFieldsCheckout() &&
+        (userIsAdmin() || 
+        (userIsDriver() &&
+        journeyBelongsToDriver()));        
+      
+        allow delete: if false;
+
+        allow read: if userIsAuthorised() &&
+        userIsAdmin() ||
+        userIsStaff() ||
+        (userIsParent() 
+        && passengerBelongsToParent())
+          ||
+        (userIsDriver() &&
+        journeyBelongsToDriver());
+
+      }
     }
   }
 }

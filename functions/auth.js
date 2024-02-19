@@ -53,6 +53,21 @@ exports.addDriverRole = functions.https.onCall((data, context) => {
     });
   });
 
+  exports.addStaffRole = functions.https.onCall((data, context) => {
+    // get user and add staff custom claim
+    return staff.auth().getUserByEmail(data.email).then(user => {
+      return staff.auth().setCustomUserClaims(user.uid, {
+        staff: true
+      })
+    }).then(() => {
+      return {
+        message: `Success! ${data.email} has been made staff.`
+      }
+    }).catch(err => {
+      return err;
+    });
+  });
+
   const driversToCreate = [
     {    
         uid: 'AppelbeesK',
@@ -101,7 +116,7 @@ exports.addDriverRole = functions.https.onCall((data, context) => {
     }
   }
   
-//createDrivers();
+createDrivers();
 
 async function getAllUsersWithRoles() {
     try {
