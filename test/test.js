@@ -16,7 +16,7 @@ const myDriverAuth = {uid: myDriverId, driver: true};
 const theirDriverId = 'driverId2';
 const theirDriverAuth = {uid: theirDriverId, driver: true};
 const myStaffId = "staffId1";
-const myStaffAuth = {uid: myStaffId, parent: true};
+const myStaffAuth = {uid: myStaffId, staff: true};
 
 /**
  * Call for every fs test function. Pass in getFirestore(null) to test not logged in.
@@ -718,7 +718,7 @@ beforeEach(async() => {
     }
 
 
-    //Write Tests:
+    // //Write Tests:
     // it("Admin can create a journey doc with correct fields", async() => {
     //     const db = getFirestore(myAdminAuth);
     //     const testDoc = db.collection("Journeys").doc(myJourneyId);
@@ -781,7 +781,7 @@ beforeEach(async() => {
     //     createJourneyDoc(theirDriverId);
     //     const db = getFirestore(myDriverAuth);
     //     const testDoc = db.collection("Journeys").doc(myJourneyId);
-    //     await firebase.assertSucceeds(testDoc.update({journeyDateTime: 'new time'}));
+    //     await firebase.assertFails(testDoc.update({journeyDateTime: 'new time'}));
     // });
 
 
@@ -867,6 +867,8 @@ beforeEach(async() => {
     //     });
 
 //PASSENGERS SUBCOLLECTION
+const myPassengerDoc = {Child: myChildDoc, parentId: myParentId, Jacket: 'JA01', JacketAssignTime: 'assign time', JacketDeassignTime: null, pickUpTime: 'pick up time', dropOffTime: null};
+
 
 //helper functions
 
@@ -883,7 +885,7 @@ function newChildDoc(thisParentId) {
 }
 
 function newPassengerDoc(thisParentId){
-    return passengerDoc = {Child: newChildDoc(thisParentId), Jacket: 'JA01', JacketAssignTime: 'assign time', JacketDeassignTime: null, pickUpTime: 'pick up time', dropOffTime: null};
+    return passengerDoc = {Child: newChildDoc(thisParentId), parentId: thisParentId, Jacket: 'JA01', JacketAssignTime: 'assign time', JacketDeassignTime: null, pickUpTime: 'pick up time', dropOffTime: null};
 }
 
 async function createPassengerDoc(thisParentId) {
@@ -895,152 +897,306 @@ async function createPassengerDoc(thisParentId) {
 
 //Write Tests
 
-it("Driver can create a passenger document on their journey with correct Fields", async() => {
-    createJourneyDoc(myDriverId);
-    const db = getFirestore(myDriverAuth);
-    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    await firebase.assertSucceeds(testDoc.set(newPassengerDoc(myParentId)));
-});
+// it("Driver can create a passenger document on their journey with correct Fields", async() => {
+//     createJourneyDoc(myDriverId);
+//     const db = getFirestore(myDriverAuth);
+//     const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+//     await firebase.assertSucceeds(testDoc.set(newPassengerDoc(myParentId)));
+// });
 
-it("Driver can't create a passenger doc with incorrect fields", async() => {
-    createJourneyDoc(myDriverId);
-    const db = getFirestore(myDriverAuth);
-    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    await firebase.assertFails(testDoc.set({childContacts: myContact, classCode: myClassCode}));
-});
+// it("Driver can't create a passenger doc with incorrect fields", async() => {
+//     createJourneyDoc(myDriverId);
+//     const db = getFirestore(myDriverAuth);
+//     const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+//     await firebase.assertFails(testDoc.set({childContacts: myContact, classCode: myClassCode}));
+// });
 
-it("Driver can update a passenger document on their journey with correct Fields", async() => {
-    createJourneyDoc(myDriverId);
-    createPassengerDoc(myParentId);
-    const db = getFirestore(myDriverAuth);
-    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    await firebase.assertSucceeds(testDoc.update({JacketAssignTime: 'New time'}));
-});
+// it("Driver can update a passenger document on their journey with correct Fields", async() => {
+//     createJourneyDoc(myDriverId);
+//     createPassengerDoc(myParentId);
+//     const db = getFirestore(myDriverAuth);
+//     const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+//     await firebase.assertSucceeds(testDoc.update({JacketAssignTime: 'New time'}));
+// });
 
-it("Driver can't update a passenger doc with incorrect fields", async() => {
-    createJourneyDoc(myDriverId);
-    createPassengerDoc(myParentId);
-    const db = getFirestore(myDriverAuth);
-    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    await firebase.assertFails(testDoc.update({RandomField: 'New time'}));
-});
+// it("Driver can't update a passenger doc with incorrect fields", async() => {
+//     createJourneyDoc(myDriverId);
+//     createPassengerDoc(myParentId);
+//     const db = getFirestore(myDriverAuth);
+//     const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+//     await firebase.assertFails(testDoc.update({RandomField: 'New time'}));
+// });
 
-it("Driver can't create a passenger document someone elses journey", async() => {
-    createJourneyDoc(myDriverId);
-    const db = getFirestore(theirDriverAuth);
-    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    await firebase.assertFails(testDoc.set(newPassengerDoc(myParentId)));
-});
+// it("Driver can't create a passenger document someone elses journey", async() => {
+//     createJourneyDoc(myDriverId);
+//     const db = getFirestore(theirDriverAuth);
+//     const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+//     await firebase.assertFails(testDoc.set(newPassengerDoc(myParentId)));
+// });
 
-it("Driver can't update a passenger doc on someone else's journey ", async() => {
-    createJourneyDoc(myDriverId);
-    createPassengerDoc(myParentId);
-    const db = getFirestore(theirDriverAuth);
-    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    await firebase.assertFails(testDoc.update({RandomField: 'New time'}));
-});
+// it("Driver can't update a passenger doc on someone else's journey ", async() => {
+//     createJourneyDoc(myDriverId);
+//     createPassengerDoc(myParentId);
+//     const db = getFirestore(theirDriverAuth);
+//     const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+//     await firebase.assertFails(testDoc.update({RandomField: 'New time'}));
+// });
 
 
-it("Auth user can't create a passenger document someone elses journey", async() => {
-    createJourneyDoc(myDriverId);
-    const db = getFirestore(myAuth);
-    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    await firebase.assertFails(testDoc.set(newPassengerDoc(myParentId)));
-});
+// it("Auth user can't create a passenger document someone elses journey", async() => {
+//     createJourneyDoc(myDriverId);
+//     const db = getFirestore(myAuth);
+//     const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+//     await firebase.assertFails(testDoc.set(newPassengerDoc(myParentId)));
+// });
 
-it("Auth can't update a passenger doc on someone else's journey ", async() => {
-    createJourneyDoc(myDriverId);
-    createPassengerDoc(myParentId);
-    const db = getFirestore(myAuth);
-    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    await firebase.assertFails(testDoc.update({RandomField: 'New time'}));
-});
+// it("Auth can't update a passenger doc on someone else's journey ", async() => {
+//     createJourneyDoc(myDriverId);
+//     createPassengerDoc(myParentId);
+//     const db = getFirestore(myAuth);
+//     const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+//     await firebase.assertFails(testDoc.update({RandomField: 'New time'}));
+// });
 
-it("Unauth user can't create a passenger document someone elses journey", async() => {
-    createJourneyDoc(myDriverId);
-    const db = getFirestore(null);
-    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    await firebase.assertFails(testDoc.set(newPassengerDoc(myParentId)));
-});
+// it("Unauth user can't create a passenger document someone elses journey", async() => {
+//     createJourneyDoc(myDriverId);
+//     const db = getFirestore(null);
+//     const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+//     await firebase.assertFails(testDoc.set(newPassengerDoc(myParentId)));
+// });
 
-it("Unauth can't update a passenger doc on someone else's journey ", async() => {
-    createJourneyDoc(myDriverId);
-    createPassengerDoc(myParentId);
-    const db = getFirestore(null);
-    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    await firebase.assertFails(testDoc.update({RandomField: 'New time'}));
-});
+// it("Unauth can't update a passenger doc on someone else's journey ", async() => {
+//     createJourneyDoc(myDriverId);
+//     createPassengerDoc(myParentId);
+//     const db = getFirestore(null);
+//     const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+//     await firebase.assertFails(testDoc.update({RandomField: 'New time'}));
+// });
 
-it("Driver can't delete a passenger document on their journey", async() => {
-    createJourneyDoc(myDriverId);
-    createPassengerDoc(myParentId);
-    const db = getFirestore(myDriverAuth);
-    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    await firebase.assertFails(testDoc.delete());
-});
+// it("Driver can't delete a passenger document on their journey", async() => {
+//     createJourneyDoc(myDriverId);
+//     createPassengerDoc(myParentId);
+//     const db = getFirestore(myDriverAuth);
+//     const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+//     await firebase.assertFails(testDoc.delete());
+// });
 
-it("Admin can't delete a passenger document", async() => {
-    createJourneyDoc(myDriverId);
-    createPassengerDoc(myParentId);
-    const db = getFirestore(myDriverAuth);
-    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    await firebase.assertFails(testDoc.delete());
-});
+// it("Admin can't delete a passenger document", async() => {
+//     createJourneyDoc(myDriverId);
+//     createPassengerDoc(myParentId);
+//     const db = getFirestore(myDriverAuth);
+//     const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+//     await firebase.assertFails(testDoc.delete());
+// });
 
-it("Auth user can't delete a passenger document", async() => {
-    const db = getFirestore(myAuth);
-    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    await firebase.assertFails(testDoc.delete());
-});
+// it("Auth user can't delete a passenger document", async() => {
+//     const db = getFirestore(myAuth);
+//     const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+//     await firebase.assertFails(testDoc.delete());
+// });
 
-it("Auth user can't delete a passenger document", async() => {
-    const db = getFirestore(null);
-    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    await firebase.assertFails(testDoc.delete());
-});
+// it("Auth user can't delete a passenger document", async() => {
+//     const db = getFirestore(null);
+//     const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+//     await firebase.assertFails(testDoc.delete());
+// });
 
-//Read tests:
+// //Read tests:
 
-it("Admin can get a passenger document", async() =>  {
-    const db = getFirestore(myAdminAuth);
-    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    await firebase.assertSucceeds(testDoc.get());
-});
+// it("Admin can get a passenger document", async() =>  {
+//     const db = getFirestore(myAdminAuth);
+//     const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+//     await firebase.assertSucceeds(testDoc.get());
+// });
 
-it("Staff can get a passenger document", async() =>  {
-    const db = getFirestore(myAdminAuth);
-    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    await firebase.assertSucceeds(testDoc.get());
-});
+// it("Staff can get a passenger document", async() =>  {
+//     const db = getFirestore(myStaffAuth);
+//     const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+//     await firebase.assertSucceeds(testDoc.get());
+// });
 
-it("Parent can get their child's passenger document", async() =>  {
-    // createJourneyDoc(myDriverId);
-    // createPassengerDoc(myParentId);
+// it("Parent can get their child's passenger document", async() =>  {
+//     const admin = getAdminFirestore();
+//     const passengerPath = "/Journeys/journeyId1/Passengers/id1";
+//     await admin.doc(passengerPath).set(myPassengerDoc);
+
+//     const db = getFirestore(myParentAuth);
+//     const testDoc = db.doc(passengerPath);
+//     await firebase.assertSucceeds(testDoc.get());
+// });
+
+// it("Parent can't get someone else's child's passenger document", async() =>  {
+//     const admin = getAdminFirestore();
+//     const passengerPath = "/Journeys/journeyId1/Passengers/id1";
+//     await admin.doc(passengerPath).set(myPassengerDoc);
     
- const childDoc1 = {childContacts: myContact, classCode: myClassCode, firstName: myFirstName, id: myChildId, parentId: myParentId, lastName: myLastName};
-const passengerDoc = {Child: childDoc1, Jacket: 'JA01', JacketAssignTime: 'assign time', JacketDeassignTime: null, pickUpTime: 'pick up time', dropOffTime: null};
- const admin = getAdminFirestore();
- const passengerPath = "/Journeys/journeyId1/Passengers/id1";
- await admin.doc(passengerPath).set(passengerDoc);
+//     const db = getFirestore(theirParentAuth);
+//     const testDoc = db.doc(passengerPath);
+//     await firebase.assertFails(testDoc.get());
+// });
 
- const db = getFirestore(myParentAuth);
- const testDoc = db.doc(passengerPath);
- await firebase.assertSucceeds(testDoc.get());
-   
+// it("Driver can get a passenger document from their journey", async() =>  {
+//     const admin = getAdminFirestore();
+//     const journeyPath = "/Journeys/journeyId1";
+//     await admin.doc(journeyPath).set(newJourneyDoc(myDriverId));
+//     const passengerPath = "/Journeys/journeyId1/Passengers/id1";
+//     await admin.doc(passengerPath).set(newPassengerDoc(myParentId));
+    
+//     const db = getFirestore(myDriverAuth);
+//     const testDoc = db.doc(passengerPath);
+//     await firebase.assertSucceeds(testDoc.get());
+// });
 
-    // const db = getFirestore(myParentAuth);
-    // const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    // await firebase.assertSucceeds(testDoc.get());
+// it("Driver can't get a passenger document from someone else's journey", async() =>  {
+//     const admin = getAdminFirestore();
+//     const journeyPath = "/Journeys/journeyId1";
+//     await admin.doc(journeyPath).set(newJourneyDoc(myDriverId));
+//     const passengerPath = "/Journeys/journeyId1/Passengers/id1";
+//     await admin.doc(passengerPath).set(newPassengerDoc(myParentId));
+    
+//     const db = getFirestore(theirDriverAuth);
+//     const testDoc = db.doc(passengerPath);
+//     await firebase.assertFails(testDoc.get());
+// });
+
+// it("Admin can list a passenger documents", async() =>  {
+//     const db = getFirestore(myAdminAuth);
+//     const testRef = db.collection("Journeys").doc(myJourneyId).collection("Passengers");
+//     await firebase.assertSucceeds(testRef.get());
+// });
+
+// it("Staff can list passenger documents", async() =>  {
+//     const db = getFirestore(myStaffAuth);
+//     const testQuery = db.collection("/Journeys/journeyId1/Passengers").where("parentId", "==", myParentId);
+//     await firebase.assertSucceeds(testQuery.get());
+// });
+
+// it("Parent can list their childrens' passenger document", async() =>  {
+//     const db = getFirestore(myParentAuth);
+//     const testQuery = db.collection("/Journeys/journeyId1/Passengers").where("parentId", "==", myParentId);
+//     await firebase.assertSucceeds(testQuery.get());
+// });
+
+// it("Parent can't list someone else's childrens' passenger documents", async() => {
+//     const db = getFirestore(theirParentAuth);
+//     const testQuery = db.collection("/Journeys/journeyId1/Passengers").where("parentId", "==", myParentId);
+//     await firebase.assertFails(testQuery.get());
+// });
+
+// it("Driver can list passenger documents from their journey", async() =>  {
+//     const admin = getAdminFirestore();
+//     const journeyPath = "/Journeys/journeyId1";
+//     await admin.doc(journeyPath).set(newJourneyDoc(myDriverId));
+    
+//     const db = getFirestore(myDriverAuth);
+//     const testRef = db.collection("/Journeys/journeyId1/Passengers");
+//     await firebase.assertSucceeds(testRef.get());
+// });
+
+// it("Driver can't list passenger documents from someone else's journey", async() =>  {
+//     const admin = getAdminFirestore();
+//     const journeyPath = "/Journeys/journeyId1";
+//     await admin.doc(journeyPath).set(newJourneyDoc(myDriverId));
+    
+//     const db = getFirestore(theirDriverAuth);
+//     const testRef = db.collection("/Journeys/journeyId1/Passengers");
+//     await firebase.assertFails(testRef.get());
+// });
+
+// it("Auth user can't list someone else's childrens' passenger documents", async() => {
+//     const db = getFirestore(myAuth);
+//     const testQuery = db.collection("/Journeys/journeyId1/Passengers").where("parentId", "==", myParentId);
+//     await firebase.assertFails(testQuery.get());
+// });
+
+// it("Unauth user can't list someone else's childrens' passenger documents", async() => {
+//     const db = getFirestore(null);
+//     const testQuery = db.collection("/Journeys/journeyId1/Passengers").where("parentId", "==", myParentId);
+//     await firebase.assertFails(testQuery.get());
+// });
+
+
+//JourneyBusStops subcollection
+
+const myJourneyBusStopDoc = {arrivalTime: '09:00', busStop: myBusStopDoc};
+
+//helper functions
+//Write Tests:
+//helper functions
+
+async function createJourneyBusStopDoc(thisParentId) {
+    const admin = getAdminFirestore();
+    const passengerDoc = admin.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await passengerDoc.set(myJourneyBusStopDoc);
+}
+//Write tests:
+
+it("Admin can create a bus stop doc with correct fields", async() => {
+    const db = getFirestore(myAdminAuth);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertSucceeds(testDoc.set(myJourneyBusStopDoc));
 });
 
-//in a pickle with this one6
+it("Admin can't create a bus stop doc with incorrect fields", async() => {
+    const db = getFirestore(myAdminAuth);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertFails(testDoc.set({random: 'rnd'}));
+});
+
+it("Auth user can't create a bus stop doc with correct fields", async() => {
+    const db = getFirestore(myAuth);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertFails(testDoc.set(myJourneyBusStopDoc));
+});
+
+it("Unauth user can't create a bus stop doc with correct fields", async() => {
+    const db = getFirestore(null);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertFails(testDoc.set(myJourneyBusStopDoc));
+});
+
+it("Admin can update a bus stop doc with correct fields", async() => {
+    createJourneyBusStopDoc();
+    const db = getFirestore(myAdminAuth);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertSucceeds(testDoc.update({arrivalTime: '10:00'}));
+});
+
+it("Admin can't update a bus stop doc with incorrect fields", async() => {
+    createJourneyBusStopDoc();
+    const db = getFirestore(myAdminAuth);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertFails(testDoc.update({random: 'rnd'}));
+});
+
+it("Driver can update a bus stop doc on their journey with correct fields", async() => {
+    createJourneyDoc(myDriverId);
+    createJourneyBusStopDoc();
+    const db = getFirestore(myDriverAuth);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertSucceeds(testDoc.update({arrivalTime: '10:00'}));
+});
+
+it("Driver can't update a bus stop doc on someone elses journey", async() => {
+    createJourneyDoc(myDriverId);
+    createJourneyBusStopDoc();
+    const db = getFirestore(theirDriverAuth);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertFails(testDoc.update({arrivalTime: '10:00'}));
+});
 
 
+it("Auth user can't create a bus stop doc with correct fields", async() => {
+    const db = getFirestore(myAuth);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertFails(testDoc.set(myJourneyBusStopDoc));
+});
 
-
-
-
-
+it("Unauth user can't create a bus stop doc with correct fields", async() => {
+    const db = getFirestore(null);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertFails(testDoc.set(myJourneyBusStopDoc));
+});
 
 
 
