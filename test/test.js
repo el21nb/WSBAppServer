@@ -1185,7 +1185,6 @@ it("Driver can't update a bus stop doc on someone elses journey", async() => {
     await firebase.assertFails(testDoc.update({arrivalTime: '10:00'}));
 });
 
-
 it("Auth user can't create a bus stop doc with correct fields", async() => {
     const db = getFirestore(myAuth);
     const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
@@ -1199,4 +1198,164 @@ it("Unauth user can't create a bus stop doc with correct fields", async() => {
 });
 
 
+it("Admin can delete a journey bus stop", async() => {
+    createJourneyDoc(myDriverId);
+    createJourneyBusStopDoc();
+    const db = getFirestore(myAdminAuth);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertSucceeds(testDoc.delete());
+});
 
+it("Auth user cant delete a journey bus stop", async() => {
+    createJourneyDoc(myDriverId);
+    createJourneyBusStopDoc();
+    const db = getFirestore(myAuth);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertFails(testDoc.delete());
+});
+
+it("Unauth user cant delete a journey bus stop", async() => {
+    createJourneyDoc(myDriverId);
+    createJourneyBusStopDoc();
+    const db = getFirestore(null);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertFails(testDoc.delete());
+});
+
+//Read Tests:
+
+it("Admin can get journey bus stop doc", async() => {
+    const db = getFirestore(myAdminAuth);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertSucceeds(testDoc.get());
+});
+
+it("Admin can list journey bus stop docs", async() => {
+    const db = getFirestore(myAdminAuth);
+    const testRef = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops');
+    await firebase.assertSucceeds(testRef.get());
+});
+
+it("Staff can get journey bus stop doc", async() => {
+    const db = getFirestore(myStaffAuth);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertSucceeds(testDoc.get());
+});
+
+it("Staff can list journey bus stop docs", async() => {
+    const db = getFirestore(myStaffAuth);
+    const testRef = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops');
+    await firebase.assertSucceeds(testRef.get());
+});
+
+it("Parent can get journey bus stop doc", async() => {
+    const db = getFirestore(myParentAuth);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertSucceeds(testDoc.get());
+});
+
+it("Parent can list journey bus stop docs", async() => {
+    const db = getFirestore(myParentAuth);
+    const testRef = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops');
+    await firebase.assertSucceeds(testRef.get());
+});
+
+it("Driver can get journey bus stop document from their journey", async() =>  {
+    const admin = getAdminFirestore();
+    const journeyPath = "/Journeys/journeyId1";
+    await admin.doc(journeyPath).set(newJourneyDoc(myDriverId));
+    
+    const db = getFirestore(myDriverAuth);
+    const testRef = db.doc("/Journeys/journeyId1/JourneyBusStops/id1");
+    await firebase.assertSucceeds(testRef.get());
+});
+
+it("Driver can't get journey bus stop document from someone else's journey", async() =>  {
+    const admin = getAdminFirestore();
+    const journeyPath = "/Journeys/journeyId1";
+    await admin.doc(journeyPath).set(newJourneyDoc(myDriverId));
+    
+    const db = getFirestore(theirDriverAuth);
+    const testRef = db.doc("/Journeys/journeyId1/JourneyBusStops/id1");
+    await firebase.assertFails(testRef.get());
+});
+
+it("Driver can list journey bus stop documents from their journey", async() =>  {
+    const admin = getAdminFirestore();
+    const journeyPath = "/Journeys/journeyId1";
+    await admin.doc(journeyPath).set(newJourneyDoc(myDriverId));
+    
+    const db = getFirestore(myDriverAuth);
+    const testRef = db.collection("/Journeys/journeyId1/JourneyBusStops");
+    await firebase.assertSucceeds(testRef.get());
+});
+
+it("Driver can't list journey bus stop documents from someone else's journey", async() =>  {
+    const admin = getAdminFirestore();
+    const journeyPath = "/Journeys/journeyId1";
+    await admin.doc(journeyPath).set(newJourneyDoc(myDriverId));
+    
+    const db = getFirestore(theirDriverAuth);
+    const testRef = db.collection("/Journeys/journeyId1/JourneyBusStops");
+    await firebase.assertFails(testRef.get());
+});
+
+it("Auth user can't get journey bus stop doc", async() => {
+    const db = getFirestore(myAuth);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertFails(testDoc.get());
+});
+
+it("Auth user can't list journey bus stop docs", async() => {
+    const db = getFirestore(myAuth);
+    const testRef = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops');
+    await firebase.assertFails(testRef.get());
+});
+
+it("Auth user can't get journey bus stop doc", async() => {
+    const db = getFirestore(null);
+    const testDoc = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops').doc(myBusStopId);
+    await firebase.assertFails(testDoc.get());
+});
+
+it("Auth user can't list journey bus stop docs", async() => {
+    const db = getFirestore(null);
+    const testRef = db.collection('Journeys').doc(myJourneyId).collection('JourneyBusStops');
+    await firebase.assertFails(testRef.get());
+});
+
+// it("Auth user can't list someone else's childrens' passenger documents", async() => {
+//     const db = getFirestore(myAuth);
+//     const testQuery = db.collection("/Journeys/journeyId1/Passengers").where("parentId", "==", myParentId);
+//     await firebase.assertFails(testQuery.get());
+// });
+
+// it("Unauth user can't list someone else's childrens' passenger documents", async() => {
+//     const db = getFirestore(null);
+//     const testQuery = db.collection("/Journeys/journeyId1/Passengers").where("parentId", "==", myParentId);
+//     await firebase.assertFails(testQuery.get());
+// });
+
+//it("Auth user can get journey document", async() => {
+    //         const db = getFirestore(myAuth);
+    //         const testDoc = db.collection("Journeys").doc(myJourneyId);
+    //         await firebase.assertSucceeds(testDoc.get());
+    //     });
+    
+    //     it("Auth user can list journey documents", async() => {
+    //         const db = getFirestore(myAuth);
+    //         const testRef = db.collection("Journeys");
+    //         await firebase.assertSucceeds(testRef.get());
+    //     });
+    
+    //     it("Unauth user can't get journey documents", async() => {
+    //         const db = getFirestore(null);
+    //         const testDoc = db.collection("Journeys").doc(myJourneyId);
+    //         await firebase.assertFails(testDoc.get());
+    //     });
+    
+    //     it("Unauth user can't list journey documents", async() => {
+    //         const db = getFirestore(null);
+    //         const testRef = db.collection("Journeys");
+    //         await firebase.assertFails(testRef.get());
+    //     });
