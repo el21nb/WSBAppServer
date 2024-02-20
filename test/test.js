@@ -1014,11 +1014,23 @@ it("Staff can get a passenger document", async() =>  {
 });
 
 it("Parent can get their child's passenger document", async() =>  {
-    createJourneyDoc(myDriverId);
-    createPassengerDoc(myParentId);
-    const db = getFirestore(myParentAuth);
-    const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
-    await firebase.assertSucceeds(testDoc.get());
+    // createJourneyDoc(myDriverId);
+    // createPassengerDoc(myParentId);
+    
+ const childDoc1 = {childContacts: myContact, classCode: myClassCode, firstName: myFirstName, id: myChildId, parentId: myParentId, lastName: myLastName};
+const passengerDoc = {Child: childDoc1, Jacket: 'JA01', JacketAssignTime: 'assign time', JacketDeassignTime: null, pickUpTime: 'pick up time', dropOffTime: null};
+ const admin = getAdminFirestore();
+ const passengerPath = "/Journeys/journeyId1/Passengers/id1";
+ await admin.doc(passengerPath).set(passengerDoc);
+
+ const db = getFirestore(myParentAuth);
+ const testDoc = db.doc(passengerPath);
+ await firebase.assertSucceeds(testDoc.get());
+   
+
+    // const db = getFirestore(myParentAuth);
+    // const testDoc = db.collection("Journeys").doc(myJourneyId).collection("Passengers").doc(myChildId);
+    // await firebase.assertSucceeds(testDoc.get());
 });
 
 //in a pickle with this one6
