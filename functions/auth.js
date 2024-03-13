@@ -116,7 +116,7 @@ exports.addDriverRole = functions.https.onCall((data, context) => {
     }
   }
   
-createDrivers();
+//createDrivers();
 
 async function getAllUsersWithRoles() {
     try {
