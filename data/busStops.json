@@ -1,0 +1,47 @@
+{
+    "BusStops": [
+        
+        {
+            "arrivalTime": "0800",
+            "busStop": "Beechwood Cres x St Michael's Lane",
+            "address": "28A St Michael's Ln, Kirkstall, Leeds LS4 2RX, UK",
+            "longitude": "-1.58369",
+            "latitude": "53.81454"
+        },
+        {
+            "arrivalTime": "0811",
+            "busStop": "Burley Park Station",
+            "address": "25 Ashville Rd, Burley, Leeds LS6 1NA, UK",
+            "longitude": "-1.57755",
+            "latitude": "53.81192"
+        },
+        {
+            "arrivalTime": "0824",
+            "busStop": "Hyde Park Picture House",
+            "address": "75 Pearson Grove, Leeds LS6 1JD, UK",
+            "longitude": "-1.56952",
+            "latitude": "53.81221"
+        },
+        {
+            "arrivalTime": "0829",
+            "busStop": "Royal Park Rd Playground",
+            "address": "Royal Park Road, Leeds LS6 1HT, UK",
+            "longitude": "-1.56905",
+            "latitude": "53.81044"
+        },
+        {
+            "arrivalTime": "0844",
+            "busStop": "Maurice Keyworth building",
+            "address": "Leeds University Business School, Woodhouse, Leeds, UK",
+            "longitude": "-1.55977",
+            "latitude": "53.80799"
+        },
+        {
+            "arrivalTime": "0855",
+            "busStop": "School of Electronic and Electrical Engineering",
+            "address": "186 Woodhouse Ln, Woodhouse, Leeds LS2 9DX, UK",
+            "longitude": "-1.55466",
+            "latitude": "53.80979"
+        }
+    ]
+}

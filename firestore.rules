@@ -72,7 +72,7 @@ service cloud.firestore {
 
       allow create: if userIsAuthorised() &&
       userIsAdmin() &&
-      documentFieldsCheckout(["address", "id", "name"], []);
+      documentFieldsCheckout(["address", "id", "name", "latitude","longitude"], []);
 
       allow update: if userIsAuthorised() &&
       userIsAdmin() &&
