@@ -2,43 +2,43 @@
     "BusStops": [
         
         {
-            "arrivalTime": "0800",
-            "busStop": "Beechwood Cres x St Michael's Lane",
+            "name": "Beechwood Cres x St Michael's Lane",
+            "id": "LS42RX",
             "address": "28A St Michael's Ln, Kirkstall, Leeds LS4 2RX, UK",
             "longitude": "-1.58369",
             "latitude": "53.81454"
         },
         {
-            "arrivalTime": "0811",
-            "busStop": "Burley Park Station",
+            "name": "Burley Park Station",
+            "id": "LS61NA",
             "address": "25 Ashville Rd, Burley, Leeds LS6 1NA, UK",
             "longitude": "-1.57755",
             "latitude": "53.81192"
         },
         {
-            "arrivalTime": "0824",
-            "busStop": "Hyde Park Picture House",
+            "name": "Hyde Park Picture House",
+            "id": "LS61JD",
             "address": "75 Pearson Grove, Leeds LS6 1JD, UK",
             "longitude": "-1.56952",
             "latitude": "53.81221"
         },
         {
-            "arrivalTime": "0829",
-            "busStop": "Royal Park Rd Playground",
+            "name": "Royal Park Rd Playground",
+            "id": "LS61HT",
             "address": "Royal Park Road, Leeds LS6 1HT, UK",
             "longitude": "-1.56905",
             "latitude": "53.81044"
         },
         {
-            "arrivalTime": "0844",
-            "busStop": "Maurice Keyworth building",
+            "name": "Maurice Keyworth building",
+            "id": "LS29JT",
             "address": "Leeds University Business School, Woodhouse, Leeds, UK",
             "longitude": "-1.55977",
             "latitude": "53.80799"
         },
         {
-            "arrivalTime": "0855",
-            "busStop": "School of Electronic and Electrical Engineering",
+            "name": "School of Electronic and Electrical Engineering",
+            "id": "LS29JT_02",
             "address": "186 Woodhouse Ln, Woodhouse, Leeds LS2 9DX, UK",
             "longitude": "-1.55466",
             "latitude": "53.80979"
