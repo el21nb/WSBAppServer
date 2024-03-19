@@ -1,13 +1,13 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const serviceAccount = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\server_details.json');
+//const serviceAccount = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\server_details.json');
 // Alternatively, you can use forward slashes
 // const serviceAccount = require('C:/Users/niamh/OneDrive - University of Leeds/Level 3/GDP/WSBAppServer/server_details.json');
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
-
+// admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount)
+// });
+ 
 exports.addAdminRole = functions.https.onCall((data, context) => {
   // get user and add admin custom claim
   return admin.auth().getUserByEmail(data.email).then(user => {

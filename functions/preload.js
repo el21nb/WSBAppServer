@@ -1,29 +1,16 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-//const serviceAccount = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\server_details.json');
-// Alternatively, you can use forward slashes
-const serviceAccount = require('C:/Users/niamh/OneDrive - University of Leeds/Level 3/GDP/WSBAppServer/server_details.json');
 
-// admin.initializeApp({
-//     credential: admin.credential.cert(serviceAccount),
-//     databaseURL: 'http://localhost:8080'
-// });
-// if (process.env.FUNCTIONS_EMULATOR === 'true') {
-//     admin.initializeApp({
-//       credential: admin.credential.applicationDefault(),
-//       databaseURL: 'http://localhost:8080',
-//     });
-//   } else {
-//     admin.initializeApp();
-//   }
-
+admin.initializeApp({
+  credential: admin.credential.applicationDefault(),
+  databaseURL: 'https://wsbapp3.firebaseio.com',
+});
 
 const firestore = admin.firestore();
-
 const currentJourneyId = 'AppelbeesK102102024AM';
 exports.importChildrenData = functions.region('europe-west2').https.onRequest(async (request, response) => {
   try {
-    const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\children.json');
+    const data = require('./data/children.json');
     //const data = require('./data/children.json');
     const batch = firestore.batch();
 
@@ -51,7 +38,7 @@ exports.importChildrenData = functions.region('europe-west2').https.onRequest(as
 
 exports.importJacketsData = functions.region('europe-west2').https.onRequest(async (request, response) => {
   try {
-    const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\jackets.json');
+    const data = require('./data/jackets.json');
     //const data = require('./data/children.json');
     const batch = firestore.batch();
 
@@ -75,7 +62,7 @@ exports.importJacketsData = functions.region('europe-west2').https.onRequest(asy
 
 exports.importBusStopsData = functions.region('europe-west2').https.onRequest(async (request, response) => {
   try {
-    const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\busStops.json');
+    const data = require('./data/busStops.json');
     const batch = firestore.batch();
 
     data.BusStops.forEach((busStopDoc) => {
@@ -101,7 +88,7 @@ exports.importBusStopsData = functions.region('europe-west2').https.onRequest(as
 
 exports.importJourneysData = functions.region('europe-west2').https.onRequest(async (request, response) => {
   try {
-    const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\journeys.json');
+    const data = require('./data/journeys.json');
     const batch = firestore.batch();
     data.Journeys.forEach((journeyDoc) => {
       const { outwardJourney, driverContact, id, journeyDateTime, driverId } = journeyDoc;
@@ -125,7 +112,7 @@ exports.importJourneysData = functions.region('europe-west2').https.onRequest(as
 
 exports.importJourneyBusStopsData = functions.region('europe-west2').https.onRequest(async (request, response) => {
   try {
-    const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\journeyBusStops.json');
+    const data = require('./data/journeyBusStops.json');
     const batch = firestore.batch();
     data.JourneyBusStops.forEach((journeyBusStopsDoc) => {
       const { arrivalTime, busStop } = journeyBusStopsDoc;
@@ -143,11 +130,10 @@ exports.importJourneyBusStopsData = functions.region('europe-west2').https.onReq
     return response.status(500).json({ error: 'Internal server error' });
   }
 });
-const { importBusStopChildrenData } = require('./preload');
 
 async function importBusStopChildrenData2(busStopId) {
   try {
-    const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\busStopChildren.json');
+    const data = require('./data/busStopChildren.json');
     const children = data.busStopChildren[busStopId];
 
     if (!children) {
@@ -183,7 +169,7 @@ async function importBusStopChildrenData2(busStopId) {
 
 exports.importAllBusStopChildrenData2 = functions.region('europe-west2').https.onRequest(async (request, response) => {
   try {
-    const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\busStopChildren.json');
+    const data = require('./data/busStopChildren.json');
     const busStopIds = Object.keys(data.busStopChildren);
     
 
@@ -202,7 +188,7 @@ exports.importAllBusStopChildrenData2 = functions.region('europe-west2').https.o
 
 exports.importTicketsData = functions.region('europe-west2').https.onRequest(async (request, response) => {
   try {
-    const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\tickets.json');
+    const data = require('./data/tickets.json');
     const batch = firestore.batch();
     data.Tickets.forEach((ticketDoc) => {
       const { busStopId, childId, journeyId, pickUp, schoolTicket, ticketId, ownerId } = ticketDoc;
@@ -224,26 +210,4 @@ exports.importTicketsData = functions.region('europe-west2').https.onRequest(asy
     console.error('Error importing data:', error);
     return response.status(500).json({ error: 'Internal server error' });
   }
-});
-
-async function preloadFirestore() {
-  try {
-      // Run each Cloud Function sequentially
-      
-      await importChildrenData({}, {});
-      await importJacketsData({}, {});
-      await importBusStopsData({}, {});
-      await importJourneysData({}, {});
-      await importAllBusStopChildrenData2({}, {});
-      await importTicketsData({}, {});
-
-      console.log("All data imported successfully into Firestore");
-  } catch (error) {
-      console.error("Error preloading Firestore:", error);
-  }
-}
-
-exports.preloadFirestore = functions.region('europe-west2').https.onRequest(async (request, response) => {
-  await preloadFirestore();
-  response.status(200).json({ message: "Preloading Firestore completed" });
 });
