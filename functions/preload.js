@@ -21,7 +21,7 @@ const serviceAccount = require('C:/Users/niamh/OneDrive - University of Leeds/Le
 const firestore = admin.firestore();
 
 const currentJourneyId = 'AppelbeesK102102024AM';
-exports.importChildrenData = functions.https.onRequest(async (request, response) => {
+exports.importChildrenData = functions.region('europe-west2').https.onRequest(async (request, response) => {
   try {
     const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\children.json');
     //const data = require('./data/children.json');
@@ -49,7 +49,7 @@ exports.importChildrenData = functions.https.onRequest(async (request, response)
   }
 });
 
-exports.importJacketsData = functions.https.onRequest(async (request, response) => {
+exports.importJacketsData = functions.region('europe-west2').https.onRequest(async (request, response) => {
   try {
     const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\jackets.json');
     //const data = require('./data/children.json');
@@ -73,20 +73,20 @@ exports.importJacketsData = functions.https.onRequest(async (request, response) 
 });
 
 
-exports.importBusStopsData = functions.https.onRequest(async (request, response) => {
+exports.importBusStopsData = functions.region('europe-west2').https.onRequest(async (request, response) => {
   try {
     const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\busStops.json');
     const batch = firestore.batch();
 
     data.BusStops.forEach((busStopDoc) => {
-      const { arrivalTime, busStop, address, longitude, latitude } = busStopDoc;
+      const { name, id, address, longitude, latitude } = busStopDoc;
 
-      const busStopRef = firestore.collection('BusStops').doc(busStop);
+      const busStopRef = firestore.collection('BusStops').doc(id);
       batch.set(busStopRef, {
-        arrivalTime,
-        busStop,
-        address,
-        longitude,
+        name, 
+        id, 
+        address, 
+        longitude, 
         latitude
       });
     });
@@ -99,7 +99,7 @@ exports.importBusStopsData = functions.https.onRequest(async (request, response)
   }
 });
 
-exports.importJourneysData = functions.https.onRequest(async (request, response) => {
+exports.importJourneysData = functions.region('europe-west2').https.onRequest(async (request, response) => {
   try {
     const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\journeys.json');
     const batch = firestore.batch();
@@ -123,7 +123,7 @@ exports.importJourneysData = functions.https.onRequest(async (request, response)
   }
 });
 
-exports.importJourneyBusStopsData = functions.https.onRequest(async (request, response) => {
+exports.importJourneyBusStopsData = functions.region('europe-west2').https.onRequest(async (request, response) => {
   try {
     const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\journeyBusStops.json');
     const batch = firestore.batch();
@@ -145,39 +145,24 @@ exports.importJourneyBusStopsData = functions.https.onRequest(async (request, re
 });
 const { importBusStopChildrenData } = require('./preload');
 
-exports.importAllBusStopChildrenData = functions.https.onRequest(async (request, response) => {
+async function importBusStopChildrenData2(busStopId) {
   try {
     const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\busStopChildren.json');
-    const busStopIds = Object.keys(data.busStopChildren);
-
-    const promises = busStopIds.map(async (busStopId) => {
-      // Call the importBusStopChildrenData function for each bus stop ID
-      await importBusStopChildrenData(request, response, busStopId);
-    });
-
-    // Wait for all promises to resolve
-    await Promise.all(promises);
-
-    return response.status(200).json({ message: 'All bus stop children data imported successfully' });
-  } catch (error) {
-    console.error('Error importing data:', error);
-    return response.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-exports.importBusStopChildrenData = functions.https.onRequest(async (request, response, busStopId) => {
-  try {
-    const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\busStopChildren.json');
-    const batch = firestore.batch();
-    const journeyBusStopRef = firestore.collection('Journeys').doc(busStopId);
     const children = data.busStopChildren[busStopId];
+
+    if (!children) {
+      console.warn(`No children data found for bus stop ${busStopId}`);
+      return;
+    }
+
+    const batch = firestore.batch();
+    const journeyBusStopRef = firestore.collection('Journeys').doc(currentJourneyId).collection('JourneyBusStops').doc(busStopId);
 
     for (let i = 0; i < children.length; i++) {
       const child = children[i];
       const { id, firstName, lastName, classCode, childContacts, parentId } = child;
       const childRef = journeyBusStopRef.collection('busStopChildren').doc(id);
 
-      // Add child data to the batch
       batch.set(childRef, {
         id,
         firstName,
@@ -188,195 +173,77 @@ exports.importBusStopChildrenData = functions.https.onRequest(async (request, re
       });
     }
 
-    // Commit the batch operation for the journeyBusStopDocument
     await batch.commit();
 
-    return response.status(200).json({ message: `Data imported successfully for bus stop ${busStopId}` });
+    console.log(`Data imported successfully for bus stop ${busStopId}`);
+  } catch (error) {
+    console.error('Error importing data:', error);
+  }
+}
+
+exports.importAllBusStopChildrenData2 = functions.region('europe-west2').https.onRequest(async (request, response) => {
+  try {
+    const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\busStopChildren.json');
+    const busStopIds = Object.keys(data.busStopChildren);
+    
+
+    const promises = busStopIds.map(async (busStopId) => {
+      await importBusStopChildrenData2(busStopId); // Call the standalone function
+    });
+
+    await Promise.all(promises);
+
+    return response.status(200).json({ message: 'All bus stop children data imported successfully' });
   } catch (error) {
     console.error('Error importing data:', error);
     return response.status(500).json({ error: 'Internal server error' });
   }
 });
 
+exports.importTicketsData = functions.region('europe-west2').https.onRequest(async (request, response) => {
+  try {
+    const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\tickets.json');
+    const batch = firestore.batch();
+    data.Tickets.forEach((ticketDoc) => {
+      const { busStopId, childId, journeyId, pickUp, schoolTicket, ticketId, ownerId } = ticketDoc;
+      const ticketRef = firestore.collection('Tickets').doc(ticketId);
+      batch.set(ticketRef, {
+        busStopId, 
+        childId, 
+        journeyId, 
+        pickUp, 
+        schoolTicket, 
+        ticketId, 
+        ownerId
+      });
+    });
 
+    await batch.commit();
+    return response.status(200).json({ message: 'Data imported successfully' });
+  } catch (error) {
+    console.error('Error importing data:', error);
+    return response.status(500).json({ error: 'Internal server error' });
+  }
+});
 
+async function preloadFirestore() {
+  try {
+      // Run each Cloud Function sequentially
+      
+      await importChildrenData({}, {});
+      await importJacketsData({}, {});
+      await importBusStopsData({}, {});
+      await importJourneysData({}, {});
+      await importAllBusStopChildrenData2({}, {});
+      await importTicketsData({}, {});
 
-// exports.importBusStopChildrenData = functions.https.onRequest(async (request, response) => {
-//   try {
-//     const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\busStopChildren.json');
+      console.log("All data imported successfully into Firestore");
+  } catch (error) {
+      console.error("Error preloading Firestore:", error);
+  }
+}
 
-//     // Iterate through each bus stop and its children
-//     Object.entries(data.busStopChildren).forEach(async ([busStopId, children]) => {
-//       const batch = firestore.batch();
-//       const journeyBusStopRef = firestore.collection('Journeys').doc(busStopId);
-
-//       for (let i = 0; i < children.length; i++) {
-//         const child = children[i];
-//         const { id, firstName, lastName, classCode, childContacts, parentId } = child;
-//         const childRef = journeyBusStopRef.collection('busStopChildren').doc(id);
-
-//         // Add child data to the batch
-//         batch.set(childRef, {
-//           id,
-//           firstName,
-//           lastName,
-//           classCode,
-//           childContacts,
-//           parentId
-//         });
-//       }
-
-//       // Commit the batch operation for each journeyBusStopDocument
-//       await batch.commit();
-//     });
-
-//     return response.status(200).json({ message: 'Data imported successfully' });
-//   } catch (error) {
-//     console.error('Error importing data:', error);
-//     return response.status(500).json({ error: 'Internal server error' });
-//   }
-// });
-
-
-// exports.importBusStopChildrenData = functions.https.onRequest(async (request, response) => {
-//   try {
-//       const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\busStopChildren.json');
-
-//       // Iterate through each bus stop and its children
-//       Object.entries(data.busStopChildren).forEach(async ([busStopId, children]) => {
-//           const batch = firestore.batch();
-//           const journeyBusStopRef = firestore.collection('Journeys').doc(busStopId);
-
-//           // Iterate through each child and add it to the batch
-//           children.forEach(child => {
-//               const { id, firstName, lastName, classCode, childContacts, parentId } = child;
-//               const childRef = journeyBusStopRef.collection('busStopChildren').doc(id);
-//               batch.set(childRef, {
-//                   id,
-//                   firstName,
-//                   lastName,
-//                   classCode,
-//                   childContacts,
-//                   parentId
-//               });
-//           });
-
-//           // Commit the batch operation for each journeyBusStopDocument
-//           await batch.commit();
-//       });
-
-//       return response.status(200).json({ message: 'Data imported successfully' });
-//   } catch (error) {
-//       console.error('Error importing data:', error);
-//       return response.status(500).json({ error: 'Internal server error' });
-//   }
-// });
-
-// exports.importBusStopChildrenData = functions.https.onRequest(async (request, response) => {
-//   Object.entries(data.busStopChildren).forEach(async ([busStopId, children]) => {
-//     const batch = firestore.batch();
-//     const journeyBusStopRef = firestore.collection('Journeys').doc(busStopId);
-  
-//     for (let i = 0; i < children.length; i++) {
-//       const child = children[i];
-//       // ... rest of your code using child object
-//     }
-  
-//     // ...
-//   });
-
-
-//   try {
-//       const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\busStopChildren.json');
-
-//       // Iterate through each bus stop and its children
-//       Object.entries(data.busStopChildren).forEach(async ([busStopId, children]) => {
-//           const batch = firestore.batch();
-//           const journeyBusStopRef = firestore.collection('Journeys').doc(busStopId);
-
-//           // Iterate through each child and add it to the batch
-//           children.forEach(child => {
-//               const { id, firstName, lastName, classCode, childContacts, parentId } = child;
-//               const childRef = journeyBusStopRef.collection('busStopChildren').doc(id);
-//               batch.set(childRef, {
-//                   id,
-//                   firstName,
-//                   lastName,
-//                   classCode,
-//                   childContacts,
-//                   parentId
-//               });
-//           });
-
-//           // Commit the batch operation for each journeyBusStopDocument
-//           await batch.commit();
-//       });
-
-//       return response.status(200).json({ message: 'Data imported successfully' });
-//   } catch (error) {
-//       console.error('Error importing data:', error);
-//       return response.status(500).json({ error: 'Internal server error' });
-//   }
-// });
-
-
-// });
-// exports.importBusStopChildrenData = functions.https.onRequest(async (request, response) => {
-//   try {
-//     const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\busStopChildren.json');
-//     const batch = firestore.batch();
-
-//     for (const [busStopId, children] of Object.entries(data.busStopChildren)) {
-//       const journeyBusStopRef = firestore.collection('Journeys').doc(busStopId);
-
-//       for (const child of children) {
-//         const { id, firstName, lastName, classCode, childContacts, parentId } = child;
-//         const childRef = journeyBusStopRef.collection('busStopChildren').doc(id);
-//         batch.set(childRef, {
-//           id,
-//           firstName,
-//           lastName,
-//           classCode,
-//           childContacts,
-//           parentId
-//         });
-//       }
-//     }
-
-//     await batch.commit();
-//     return response.status(200).json({ message: 'Data imported successfully' });
-//   } catch (error) {
-//     console.error('Error importing data:', error);
-//     return response.status(500).json({ error: 'Internal server error' });
-//   }
-// });
-
-
-// try {
-//   const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\busStopChildren.json');
-//   const batch = firestore.batch();
-//   data.JourneyBusStops.forEach((busStopChildrenCollection) => {
-//     const { arrivalTime, busStop } = journeyBusStopsDoc;
-//     const journeyBusStopRef = firestore.collection('Journeys').doc(currentJourneyId).collection('JourneyBusStops').doc(busStop.id);
-//     batch.set(journeyBusStopRef, {
-//       arrivalTime,
-//       busStop
-//     });
-//   });
-
-//   try {
-//     const data = require('C:\\Users\\niamh\\OneDrive - University of Leeds\\Level 3\\GDP\\WSBAppServer\\data\\busStopChildren.json');
-//     const batch = firestore.batch();
-//     for (var journeyBusStopDoc in data.busStopChildren) {
-//       for (var child in data.busStopChildren.journeyBusStopDoc) {
-//         const { id, firstName, lastName, classCode, childContacts, parentId } = child;
-
-//       }
-//     }
-
-
-//     data.busStopChildren.forEach(busStop => {
-//       Object.entries(busStop).forEach([busStopId, children]) => {
-
-//       }
-//     })
+exports.preloadFirestore = functions.region('europe-west2').https.onRequest(async (request, response) => {
+  await preloadFirestore();
+  response.status(200).json({ message: "Preloading Firestore completed" });
+});

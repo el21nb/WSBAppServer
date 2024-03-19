@@ -1,0 +1,165 @@
+{"Tickets": [
+    {
+        "busStopId": "LS29JT",
+        "childId": "MartinezL1EF",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": true,
+        "schoolTicket": false,
+        "ticketId": "MartinezL1EFAppelbeesK102102024AM",
+        "ownerId": "parentMartinezL1EF"
+    },
+    {
+        "busStopId": "LS42RX",
+        "childId": "CallowayF3AS",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": true,
+        "schoolTicket": false,
+        "ticketId": "CallowayF3ASAppelbeesK102102024AM",
+        "ownerId": "parentCallowayF3AS"
+    },
+    {
+        "busStopId": "LS42RX",
+        "childId": "SmithL4GH",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": true,
+        "schoolTicket": false,
+        "ticketId": "SmithL4GHAppelbeesK102102024AM",
+        "ownerId": "parentSmithL4GH"
+    },
+    {
+        "busStopId": "LS61HT",
+        "childId": "GarciaO2IB",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": true,
+        "schoolTicket": false,
+        "ticketId": "GarciaO2IBAppelbeesK102102024AM",
+        "ownerId": "parentGarciaO2IB"
+    },
+    {
+        "busStopId": "LS61HT",
+        "childId": "MillerJ2IB",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": true,
+        "schoolTicket": false,
+        "ticketId": "MillerJ2IBAppelbeesK102102024AM",
+        "ownerId": "parentMillerJ2IB"
+    },
+    {
+        "busStopId": "LS61JD",
+        "childId": "BrownA5HW",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": true,
+        "schoolTicket": false,
+        "ticketId": "BrownA5HWAppelbeesK102102024AM",
+        "ownerId": "parentBrownA5HW"
+    },
+    {
+        "busStopId": "LS61JD",
+        "childId": "DavisS5SM",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": true,
+        "schoolTicket": false,
+        "ticketId": "DavisS5SMAppelbeesK102102024AM",
+        "ownerId": "parentDavisS5SM"
+    },
+    {
+        "busStopId": "LS61JD",
+        "childId": "JonesE5HW",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": true,
+        "schoolTicket": false,
+        "ticketId": "JonesE5HWAppelbeesK102102024AM",
+        "ownerId": "parentJonesE5HW"
+    },
+    {
+        "busStopId": "LS61JD",
+        "childId": "JohnsonO3AS",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": true,
+        "schoolTicket": false,
+        "ticketId": "JohnsonO3ASAppelbeesK102102024AM",
+        "ownerId": "parentJohnsonO3AS"
+    },
+
+    {
+        "busStopId": "LS29JT",
+        "childId": "MartinezL1EF",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": false,
+        "schoolTicket": true,
+        "ticketId": "MartinezL1EFAppelbeesK102102024AM",
+        "ownerId": "teacherId"
+    },
+    {
+        "busStopId": "LS42RX",
+        "childId": "CallowayF3AS",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": false,
+        "schoolTicket": true,
+        "ticketId": "CallowayF3ASAppelbeesK102102024AM",
+        "ownerId": "teacherId"
+    },
+    {
+        "busStopId": "LS42RX",
+        "childId": "SmithL4GH",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": false,
+        "schoolTicket": true,
+        "ticketId": "SmithL4GHAppelbeesK102102024AM",
+        "ownerId": "teacherId"
+    },
+    {
+        "busStopId": "LS61HT",
+        "childId": "GarciaO2IB",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": false,
+        "schoolTicket": true,
+        "ticketId": "GarciaO2IBAppelbeesK102102024AM",
+        "ownerId": "teacherId"
+    },
+    {
+        "busStopId": "LS61HT",
+        "childId": "MillerJ2IB",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": false,
+        "schoolTicket": true,
+        "ticketId": "MillerJ2IBAppelbeesK102102024AM",
+        "ownerId": "teacherId"
+    },
+    {
+        "busStopId": "LS61JD",
+        "childId": "BrownA5HW",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": false,
+        "schoolTicket": true,
+        "ticketId": "BrownA5HWAppelbeesK102102024AM",
+        "ownerId": "teacherId"
+    },
+    {
+        "busStopId": "LS61JD",
+        "childId": "DavisS5SM",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": false,
+        "schoolTicket": true,
+        "ticketId": "DavisS5SMAppelbeesK102102024AM",
+        "ownerId": "teacherId"
+    },
+    {
+        "busStopId": "LS61JD",
+        "childId": "JonesE5HW",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": false,
+        "schoolTicket": true,
+        "ticketId": "JonesE5HWAppelbeesK102102024AM",
+        "ownerId": "teacherId"
+    },
+    {
+        "busStopId": "LS61JD",
+        "childId": "JohnsonO3AS",
+        "journeyId": "AppelbeesK102102024AM",
+        "pickUp": false,
+        "schoolTicket": true,
+        "ticketId": "JohnsonO3ASAppelbeesK102102024AM",
+        "ownerId": "teacherId"
+    }
+  ]}
