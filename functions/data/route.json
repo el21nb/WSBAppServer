@@ -1,0 +1,278 @@
+{"route": [
+    {
+      "pointNumber": 1,
+      "latitude": 53.8145405,
+      "longitude": -1.5836933
+    },
+    {
+      "pointNumber": 2,
+      "latitude": 53.8145152,
+      "longitude": -1.583573
+    },
+    {
+      "pointNumber": 3,
+      "latitude": 53.8144787,
+      "longitude": -1.583463
+    },
+    {
+      "pointNumber": 4,
+      "latitude": 53.8144233,
+      "longitude": -1.5833772
+    },
+    {
+      "pointNumber": 5,
+      "latitude": 53.8138073,
+      "longitude": -1.5826879
+    },
+    {
+      "pointNumber": 6,
+      "latitude": 53.8137471,
+      "longitude": -1.582602
+    },
+    {
+      "pointNumber": 7,
+      "latitude": 53.8133322,
+      "longitude": -1.5813575
+    },
+    {
+      "pointNumber": 8,
+      "latitude": 53.812865,
+      "longitude": -1.580045
+    },
+    {
+      "pointNumber": 9,
+      "latitude": 53.8128397,
+      "longitude": -1.5799403
+    },
+    {
+      "pointNumber": 10,
+      "latitude": 53.8126703,
+      "longitude": -1.5796104
+    },
+    {
+      "pointNumber": 11,
+      "latitude": 53.8125629,
+      "longitude": -1.5793652
+    },
+    {
+      "pointNumber": 12,
+      "latitude": 53.8123855,
+      "longitude": -1.5791372
+    },
+    {
+      "pointNumber": 13,
+      "latitude": 53.8122541,
+      "longitude": -1.579046
+    },
+    {
+      "pointNumber": 14,
+      "latitude": 53.8120483,
+      "longitude": -1.5789732
+    },
+    {
+      "pointNumber": 15,
+      "latitude": 53.8120546,
+      "longitude": -1.5788498
+    },
+    {
+      "pointNumber": 16,
+      "latitude": 53.8123112,
+      "longitude": -1.578308
+    },
+    {
+      "pointNumber": 17,
+      "latitude": 53.8121085,
+      "longitude": -1.5780934
+    },
+    {
+      "pointNumber": 18,
+      "latitude": 53.8121592,
+      "longitude": -1.5780237
+    },
+    {
+      "pointNumber": 19,
+      "latitude": 53.8120641,
+      "longitude": -1.5779057
+    },
+    {
+      "pointNumber": 20,
+      "latitude": 53.8120356,
+      "longitude": -1.5779861
+    },
+    {
+      "pointNumber": 21,
+      "latitude": 53.8118203,
+      "longitude": -1.5777769
+    },
+    {
+      "pointNumber": 22,
+      "latitude": 53.8122542,
+      "longitude": -1.5763124
+    },
+    {
+      "pointNumber": 23,
+      "latitude": 53.8119501,
+      "longitude": -1.5761139
+    },
+    {
+      "pointNumber": 24,
+      "latitude": 53.8121433,
+      "longitude": -1.5753415
+    },
+    {
+      "pointNumber": 25,
+      "latitude": 53.812403,
+      "longitude": -1.5742632
+    },
+    {
+      "pointNumber": 26,
+      "latitude": 53.8120356,
+      "longitude": -1.573936
+    },
+    {
+      "pointNumber": 27,
+      "latitude": 53.812813,
+      "longitude": -1.5710354
+    },
+    {
+      "pointNumber": 28,
+      "latitude": 53.8119863,
+      "longitude": -1.5704238
+    },
+    {
+      "pointNumber": 29,
+      "latitude": 53.8120713,
+      "longitude": -1.5700844
+    },
+    {
+      "pointNumber": 30,
+      "latitude": 53.8123056,
+      "longitude": -1.5690759
+    },
+    {
+      "pointNumber": 31,
+      "latitude": 53.811821,
+      "longitude": -1.5692153
+    },
+    {
+      "pointNumber": 32,
+      "latitude": 53.8116848,
+      "longitude": -1.5693119
+    },
+    {
+      "pointNumber": 33,
+      "latitude": 53.8105382,
+      "longitude": -1.5697035
+    },
+    {
+      "pointNumber": 34,
+      "latitude": 53.8103894,
+      "longitude": -1.5684536
+    },
+    {
+      "pointNumber": 35,
+      "latitude": 53.8102975,
+      "longitude": -1.5679708
+    },
+    {
+      "pointNumber": 36,
+      "latitude": 53.8102437,
+      "longitude": -1.567429
+    },
+    {
+      "pointNumber": 37,
+      "latitude": 53.8100283,
+      "longitude": -1.5658572
+    },
+    {
+      "pointNumber": 38,
+      "latitude": 53.8100219,
+      "longitude": -1.5657446
+    },
+    {
+      "pointNumber": 39,
+      "latitude": 53.8099713,
+      "longitude": -1.565766
+    },
+    {
+      "pointNumber": 40,
+      "latitude": 53.8095151,
+      "longitude": -1.5644035
+    },
+    {
+      "pointNumber": 41,
+      "latitude": 53.8092491,
+      "longitude": -1.5635784
+    },
+    {
+      "pointNumber": 42,
+      "latitude": 53.8090147,
+      "longitude": -1.5630527
+    },
+    {
+      "pointNumber": 43,
+      "latitude": 53.8085173,
+      "longitude": -1.5616204
+    },
+    {
+      "pointNumber": 44,
+      "latitude": 53.8080644,
+      "longitude": -1.5600057
+    },
+    {
+      "pointNumber": 45,
+      "latitude": 53.807982,
+      "longitude": -1.5595605
+    },
+    {
+      "pointNumber": 46,
+      "latitude": 53.8087834,
+      "longitude": -1.5586432
+    },
+    {
+      "pointNumber": 47,
+      "latitude": 53.8095563,
+      "longitude": -1.5582194
+    },
+    {
+      "pointNumber": 48,
+      "latitude": 53.8100219,
+      "longitude": -1.557801
+    },
+    {
+      "pointNumber": 49,
+      "latitude": 53.81044,
+      "longitude": -1.5570875
+    },
+    {
+      "pointNumber": 50,
+      "latitude": 53.8107061,
+      "longitude": -1.556433
+    },
+    {
+      "pointNumber": 51,
+      "latitude": 53.8105921,
+      "longitude": -1.5562024
+    },
+    {
+      "pointNumber": 52,
+      "latitude": 53.8102342,
+      "longitude": -1.5558215
+    },
+    {
+      "pointNumber": 53,
+      "latitude": 53.8100599,
+      "longitude": -1.5554674
+    },
+    {
+      "pointNumber": 54,
+      "latitude": 53.8099681,
+      "longitude": -1.5551778
+    },
+    {
+      "pointNumber": 55,
+      "latitude": 53.809791,
+      "longitude": -1.5546699
+    }
+  ]
+}

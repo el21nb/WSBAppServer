@@ -186,25 +186,24 @@ exports.importAllBusStopChildrenData2 = functions.region('europe-west2').https.o
   }
 });
 
-exports.importTicketsData = functions.region('europe-west2').https.onRequest(async (request, response) => {
+exports.importRouteData = functions.region('europe-west2').https.onRequest(async (request, response) => {
   try {
-    const data = require('./data/tickets.json');
-    const batch = firestore.batch();
-    data.Tickets.forEach((ticketDoc) => {
-      const { busStopId, childId, journeyId, pickUp, schoolTicket, ticketId, ownerId } = ticketDoc;
-      const ticketRef = firestore.collection('Tickets').doc(ticketId);
-      batch.set(ticketRef, {
-        busStopId, 
-        childId, 
-        journeyId, 
-        pickUp, 
-        schoolTicket, 
-        ticketId, 
-        ownerId
-      });
+    const data = require('./data/route.json');
+    
+    // Create an object to hold all the points
+    const points = {};
+
+    // Iterate over the data and populate the points object
+    data.route.forEach((point, index) => {
+      points[`${index + 1}`] = { 
+        latitude: point.latitude, 
+        longitude: point.longitude 
+      };
     });
 
-    await batch.commit();
+    // Create a document in the "Routes" collection with the points object
+    await firestore.collection('Journeys').doc(currentJourneyId).collection('Routes').doc('routeData').set({ points });
+
     return response.status(200).json({ message: 'Data imported successfully' });
   } catch (error) {
     console.error('Error importing data:', error);
