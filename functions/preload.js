@@ -8,6 +8,62 @@ admin.initializeApp({
 
 const firestore = admin.firestore();
 const currentJourneyId = 'AppelbeesK102102024AM';
+
+// exports.sendNotifications = functions.region('europe-west2').document("Statuses/{statusId}").onCreate(
+//   async (snapshot) => {
+//     // Notification details.
+//     const statusTitle = snapshot.data().title;
+//     const payload = {
+//       notification: {
+//         title: "New status posted: ",
+//         body: statusTitle,
+//       }
+//     };
+//     return admin.messaging().sendToTopic('statuses', payload);
+// });
+// import {
+//   onDocumentCreated,
+//   Change,
+//   FirestoreEvent
+// } from "firebase-functions/v2/firestore";
+
+// exports.sendNotifications = onDocumentCreated("Statuses/{statusId}", (event) => {
+//   const snapshot = event.data;
+//   if (!snapshot) {
+//       console.log("No data associated with the event");
+//       return;
+//   }
+//   const data = snapshot.data();
+
+//   const statusTitle = data.title;
+
+//   const payload = {
+//     notification: {
+//       title: "New status posted: ",
+//       body: statusTitle,
+//     }
+//   };
+//   return admin.messaging().sendToTopic('statuses', payload);});
+const { onDocumentCreated } = require("firebase-functions/v2/firestore");
+
+exports.sendNotifications = onDocumentCreated("Statuses/{statusId}", (event) => {
+  const snapshot = event.data;
+  if (!snapshot) {
+      console.log("No data associated with the event");
+      return;
+  }
+  const data = snapshot.data();
+
+  const statusTitle = data.title;
+
+  const payload = {
+    notification: {
+      title: "New status posted: ",
+      body: statusTitle,
+    }
+  };
+  return admin.messaging().sendToTopic('statuses', payload);
+});
 exports.importChildrenData = functions.region('europe-west2').https.onRequest(async (request, response) => {
   try {
     const data = require('./data/children.json');
@@ -210,3 +266,4 @@ exports.importRouteData = functions.region('europe-west2').https.onRequest(async
     return response.status(500).json({ error: 'Internal server error' });
   }
 });
+
